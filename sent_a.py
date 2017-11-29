@@ -2,6 +2,7 @@ import tweepy
 import json
 import datetime as dt
 import re
+import time
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem.snowball import SnowballStemmer
@@ -22,7 +23,7 @@ class TwitterAnalizer():
 
     def search_feed(self, search_words):
         #iterating through the tweets in order to assing them to a list wich represents the day created of the tweet.
-        tw_cursor = tweepy.Cursor(self.api.search, q=search_words, lang='en').pages(50)
+        tw_cursor = self.limit_handled(tweepy.Cursor(self.api.search, q=search_words, lang='en').pages())
 
 
         for page in tw_cursor:
@@ -62,6 +63,13 @@ class TwitterAnalizer():
                 tokenized.append(snow_s.stem(word))
 
         return " ".join(tokenized)
+
+    def limit_handled(self,cursor):
+        while True:
+            try:
+                yield cursor.next()
+            except tweepy.error.TweepError:
+                time.sleep(15 * 60)
 
 
 if __name__ == "__main__":
