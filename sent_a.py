@@ -22,7 +22,7 @@ class TwitterAnalizer():
 
     def search_feed(self, search_words):
         #iterating through the tweets in order to assing them to a list wich represents the day created of the tweet.
-        tw_cursor = tweepy.Cursor(self.api.search, q=search_words, lang='en').pages(60)
+        tw_cursor = tweepy.Cursor(self.api.search, q=search_words, lang='en').pages(50)
 
 
         for page in tw_cursor:
